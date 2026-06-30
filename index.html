@@ -331,7 +331,7 @@ async function descargarPDF(){
       image:{type:"jpeg",quality:0.98},
       html2canvas:{scale:2,useCORS:true,backgroundColor:"#F1ECE4",
         width:PW,height:PH,windowWidth:PW,windowHeight:PH},
-      jsPDF:{unit:"px",format:[PW,PH],orientation:"portrait"},
+      jsPDF:{unit:"mm",format:"a4",orientation:"portrait"},
       pagebreak:{mode:["avoid-all"]}
     };
     await html2pdf().set(opt).from(clone).save();
