@@ -317,7 +317,9 @@ async function descargarPDF(){
     // escala de la vista previa, para que se capture nítida y completa.
     const src=document.querySelector(".page");
     const holder=document.createElement("div");
-    holder.style.cssText="position:fixed;left:-99999px;top:0;width:"+PW+"px;height:"+PH+"px;background:#fff;";
+    // En 0,0 y detrás del contenido (z-index negativo): coordenadas positivas
+    // para que html2canvas no descuadre el render, y oculto tras la app.
+    holder.style.cssText="position:fixed;left:0;top:0;z-index:-1;width:"+PW+"px;height:"+PH+"px;background:#fff;overflow:hidden;";
     const clone=src.cloneNode(true);
     clone.style.boxShadow="none"; clone.style.margin="0";
     clone.style.width=PW+"px"; clone.style.height=PH+"px";
@@ -329,12 +331,18 @@ async function descargarPDF(){
       margin:0,
       filename:nombre.replace(/[^\w\sÁÉÍÓÚáéíóúÑñ.\-]/g," ").trim()+".pdf",
       image:{type:"jpeg",quality:0.98},
-      html2canvas:{scale:2,useCORS:true,backgroundColor:"#F1ECE4",
-        width:PW,height:PH,windowWidth:PW,windowHeight:PH},
+      html2canvas:{scale:2,useCORS:true,backgroundColor:"#F1ECE4",scrollX:0,scrollY:0},
       jsPDF:{unit:"mm",format:"a4",orientation:"portrait"},
       pagebreak:{mode:["avoid-all"]}
     };
-    await html2pdf().set(opt).from(clone).save();
+    // Generamos el PDF pero, en vez de .save() directo, recuperamos el objeto
+    // jsPDF: la página 1 ya tiene el documento completo. html2pdf a veces añade
+    // una 2ª hoja por un sobrante de 1 px al paginar, así que la eliminamos.
+    const worker=html2pdf().set(opt).from(clone).toPdf();
+    const pdf=await worker.get("pdf");
+    const n=pdf.internal.getNumberOfPages();
+    for(let i=n;i>1;i--) pdf.deletePage(i);
+    pdf.save(opt.filename);
     document.body.removeChild(holder);
   }catch(err){
     alert("No se pudo generar el PDF: "+(err&&err.message?err.message:err)+"\nUsa el botón Imprimir como alternativa.");
