@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presupuesto · La Banda de la Abuela</title>
+<style>
+@font-face{ font-family:'Bricolage'; src:url('fonts/Bricolage.ttf') format('truetype'); font-weight:200 800; font-display:swap; }
+@font-face{ font-family:'Hanken'; src:url('fonts/HankenGrotesk.ttf') format('truetype'); font-weight:300 800; font-style:normal; font-display:swap; }
+@font-face{ font-family:'Hanken'; src:url('fonts/HankenGrotesk-Italic.ttf') format('truetype'); font-weight:300 800; font-style:italic; font-display:swap; }
+@font-face{ font-family:'SpaceMono'; src:url('fonts/SpaceMono-Regular.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face{ font-family:'SpaceMono'; src:url('fonts/SpaceMono-Bold.ttf') format('truetype'); font-weight:700; font-display:swap; }
+:root{
+  --ink:#1A1513; --ink-2:#241E1A; --paper:#F1ECE4; --paper-2:#E8E0D4; --paper-3:#D8CDBC;
+  --line:#CDC1AE; --red:#DC3A2B; --red-deep:#B62A1D; --muted:#8A7E70; --muted-2:#A89C8C;
+  --cream:#EFE8DD; --cream-2:#C9BFB1;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+a{color:inherit;text-decoration:none;}
+
+/* ===================== DOCUMENTO (1 página) ===================== */
+.page{ position:relative; width:210mm; height:297mm; overflow:hidden; background:var(--paper);
+  -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.qpage{ position:absolute; inset:0; display:flex; flex-direction:column; padding:44px 46px 40px; }
+
+.qtop{ display:flex; gap:26px; align-items:flex-start; }
+.qtop__l{ flex:1; min-width:0; }
+.qlogo{ height:50px; width:50px; object-fit:contain; display:block; margin-bottom:16px; }
+.qkick{ font-family:'SpaceMono',monospace;font-weight:700;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:11px; }
+.qkick::before{ content:"";width:18px;height:9px;background:var(--red);display:inline-block;border-radius:1px; }
+.qtitle{ font-family:'Bricolage',sans-serif;font-weight:800;font-size:36px;line-height:.98;letter-spacing:-.03em;color:var(--ink);margin-top:12px; }
+.qtitle em{font-style:normal;color:var(--red);}
+.qpara{ font-family:'SpaceMono',monospace;font-weight:700;font-size:11px;letter-spacing:.04em;color:#3C332B;margin-top:12px; }
+.qpara span{color:var(--red);}
+.qphoto{ width:168px;height:152px;border-radius:7px;object-fit:cover;object-position:50% 30%;flex:0 0 auto;box-shadow:0 4px 18px rgba(0,0,0,.18); }
+.qrule{ height:2px;background:var(--red);margin-top:20px; }
+
+.qbody{ flex:1; display:flex; flex-direction:column; padding-top:20px; min-height:0; }
+.qintro{ font-size:14px;line-height:1.6;color:#4A4036;max-width:600px; }
+
+.tariffs{ margin-top:16px; }
+.tier{ margin-bottom:14px; }
+.tier:last-child{ margin-bottom:0; }
+.tier__h{ display:flex;align-items:center;gap:12px;margin-bottom:2px; }
+.tier__dur{ font-family:'Bricolage',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.02em;color:var(--ink); }
+.tier__line{ flex:1;height:1px;background:var(--line); }
+.tier__tag{ font-family:'SpaceMono',monospace;font-weight:700;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted); }
+.prow{ display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--paper-3); }
+.prow:last-child{border-bottom:none;}
+.prow__m{ font-family:'Hanken',sans-serif;font-weight:600;font-size:15px;color:#2A231E;display:flex;align-items:center;gap:10px; }
+.prow__m::before{ content:"";width:6px;height:6px;border-radius:50%;background:var(--red);display:inline-block;flex:0 0 auto; }
+.prow__p{ font-family:'Bricolage',sans-serif;font-weight:800;font-size:23px;letter-spacing:-.02em;color:var(--ink); }
+
+.incl{ margin-top:auto;background:var(--ink);color:var(--cream);border-radius:5px;padding:18px 24px; }
+.incl__lab{ font-family:'SpaceMono',monospace;font-weight:700;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#FF6B5C;margin-bottom:13px; }
+.incl__grid{ display:grid;grid-template-columns:1fr 1fr;gap:9px 26px; }
+.incl__grid div{ font-family:'Hanken',sans-serif;font-weight:500;font-size:13.5px;color:#E7DED1;display:flex;align-items:flex-start;gap:9px; }
+.incl__grid div::before{ content:"✓";color:#FF6B5C;font-weight:700;flex:0 0 auto; }
+
+.qfooter{ margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:20px; }
+.qcontact{ font-family:'SpaceMono',monospace;font-size:11px;letter-spacing:.04em;color:#3C332B;line-height:1.7; }
+.qcontact b{font-weight:700;color:var(--ink);}
+.qcta{ background:var(--red);color:#fff;border-radius:5px;padding:13px 20px;display:inline-flex;align-items:center;gap:10px;flex:0 0 auto;
+  font-family:'Bricolage',sans-serif;font-weight:800;font-size:15px;letter-spacing:-.01em; }
+.qnote{ margin-top:12px;font-family:'SpaceMono',monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--line);padding-top:11px; }
+
+/* ===================== INTERFAZ (no se imprime) ===================== */
+body{ font-family:'Hanken',sans-serif; color:var(--ink); background:#EDE7DE; -webkit-font-smoothing:antialiased;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.appbar{ position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;background:var(--ink);color:var(--cream);padding:13px 20px; }
+.appbar__logo{width:34px;height:34px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.appbar__logo img{width:80%;height:80%;object-fit:contain;}
+.appbar__title{font-family:'Bricolage',sans-serif;font-weight:800;font-size:16px;letter-spacing:-.01em;line-height:1.1;}
+.appbar__title span{display:block;font-family:'SpaceMono',monospace;font-weight:400;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-2);margin-top:2px;}
+.appbar__sp{flex:1;}
+.btn{font-family:'Hanken',sans-serif;font-weight:700;font-size:13.5px;border:none;border-radius:7px;padding:10px 16px;cursor:pointer;white-space:nowrap;}
+.btn--print{background:var(--red);color:#fff;} .btn--print:hover{background:var(--red-deep);}
+.btn--ghost{background:transparent;color:var(--cream);border:1px solid rgba(255,255,255,.28);} .btn--ghost:hover{background:rgba(255,255,255,.08);}
+
+.layout{ display:grid; grid-template-columns:minmax(340px,420px) 1fr; align-items:start; }
+.form{ background:#fff;border-right:1px solid var(--paper-3);padding:24px 22px 60px;height:calc(100vh - 60px);overflow-y:auto;position:sticky;top:60px; }
+.form__sec{font-family:'SpaceMono',monospace;font-weight:700;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin:26px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--paper-3);}
+.form__sec:first-child{margin-top:0;}
+.fld{margin-bottom:13px;}
+.fld label{display:block;font-family:'SpaceMono',monospace;font-weight:700;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.fld input,.fld textarea{width:100%;font-family:'Hanken',sans-serif;font-size:14px;color:var(--ink);background:#FBF9F5;border:1px solid var(--line);border-radius:7px;padding:9px 11px;outline:none;}
+.fld input:focus,.fld textarea:focus{border-color:var(--red);background:#fff;}
+.fld textarea{resize:vertical;line-height:1.45;}
+.fld .hint{font-family:'Hanken',sans-serif;font-weight:400;font-size:11px;color:var(--muted);margin-top:4px;text-transform:none;letter-spacing:0;line-height:1.4;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+
+.preview{padding:28px;overflow:auto;height:calc(100vh - 60px);}
+.preview__hint{font-family:'SpaceMono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:14px;}
+#doc{width:210mm;margin:0 auto;transform-origin:top center;}
+#doc .page{box-shadow:0 8px 34px rgba(0,0,0,.16);margin:0 auto;}
+
+@media (max-width:880px){
+  .layout{grid-template-columns:1fr;}
+  .form{height:auto;position:static;border-right:none;border-bottom:1px solid var(--paper-3);}
+  .preview{height:auto;}
+}
+@media (max-width:680px){
+  .appbar{flex-wrap:wrap;gap:9px;padding:12px 14px;}
+  .appbar__sp{display:none;} .appbar__title{flex:1 1 auto;}
+  .btn--ghost{flex:1;} .btn--print{flex:1 1 100%;}
+}
+
+@page{ size:A4; margin:0; }
+@media print{
+  .appbar,.form,.preview__hint{display:none !important;}
+  .layout{display:block !important;}
+  .preview{height:auto !important;overflow:visible !important;padding:0 !important;background:none !important;}
+  #doc{width:auto !important;margin:0 !important;transform:none !important;zoom:1 !important;}
+  #doc .page{box-shadow:none !important;margin:0 !important;}
+  html,body{background:#fff !important;}
+}
+</style>
+</head>
+<body>
+
+<div class="appbar">
+  <div class="appbar__logo"><img src="assets/logo.png" alt="logo"></div>
+  <div class="appbar__title">La Banda de la Abuela<span>Presupuesto</span></div>
+  <div class="appbar__sp"></div>
+  <button class="btn btn--ghost" onclick="cargarEjemplo()">Cargar ejemplo</button>
+  <button class="btn btn--ghost" onclick="limpiar()">Limpiar</button>
+  <button class="btn btn--print" onclick="window.print()">Imprimir / Guardar PDF</button>
+</div>
+
+<div class="layout">
+
+  <!-- ============ FORMULARIO ============ -->
+  <aside class="form" id="form">
+    <div class="form__sec">Datos (opcional)</div>
+    <div class="fld"><label>Dirigido a (cliente o evento)</label><input id="f_para" placeholder="Ej.: Boda de Marta · 12 sept">
+      <div class="hint">Opcional. Si lo dejas vacío, no aparece.</div></div>
+
+    <div class="form__sec">Tarifas</div>
+    <div class="fld"><label>Precios (una línea por opción)</label>
+      <textarea id="f_tarifas" rows="6" placeholder="3 horas, 4 músicos, 1.290 €"></textarea>
+      <div class="hint">Formato: <b>duración, músicos, precio</b> (igual que por WhatsApp). Se agrupan solas por duración, así que puedes poner 2, 3 y 4 horas seguidas.</div></div>
+
+    <div class="form__sec">Todo incluido en el precio</div>
+    <div class="fld"><label>Qué incluye (uno por línea)</label>
+      <textarea id="f_incluye" rows="5" placeholder="Instrumentos&#10;Equipo de sonido profesional&#10;Iluminación de escenario"></textarea></div>
+
+    <div class="form__sec">Contacto</div>
+    <div class="fld"><label>Nombre</label><input id="f_cnombre" placeholder="Alberto Méndez"></div>
+    <div class="frow">
+      <div class="fld"><label>Teléfono</label><input id="f_ctel" placeholder="+34 722 716 255"></div>
+      <div class="fld"><label>Correo</label><input id="f_cemail" placeholder="abueleros@gmail.com"></div>
+    </div>
+  </aside>
+
+  <!-- ============ VISTA PREVIA ============ -->
+  <main class="preview" id="preview">
+    <div class="preview__hint">Vista previa · se actualiza mientras escribes</div>
+    <div id="doc">
+      <section class="page">
+        <div class="qpage">
+
+          <div class="qtop">
+            <div class="qtop__l">
+              <img class="qlogo" src="assets/logo.png" alt="logo">
+              <div class="qkick">PRESUPUESTO</div>
+              <h1 class="qtitle">Música en directo <em>a tu medida.</em></h1>
+              <div class="qpara" id="b_para" style="display:none;">PARA <span>·</span> <span id="b_para_t"></span></div>
+            </div>
+            <img class="qphoto" src="assets/cover.jpg" alt="La Banda de la Abuela">
+          </div>
+          <div class="qrule"></div>
+
+          <div class="qbody">
+            <p class="qintro">Gracias por tu interés. El precio varía según la duración del directo y el número de músicos. Estas son nuestras tarifas:</p>
+
+            <div class="tariffs" id="b_tarifas"></div>
+
+            <div class="incl">
+              <div class="incl__lab">TODO INCLUIDO EN EL PRECIO</div>
+              <div class="incl__grid" id="b_incluye"></div>
+            </div>
+
+            <div class="qfooter">
+              <div class="qcontact" id="b_contact"></div>
+              <a class="qcta" id="b_cta" href="https://bit.ly/bandaabuela-formulario-booking">Reserva tu fecha →</a>
+            </div>
+            <div class="qnote">Presupuesto orientativo · sujeto a confirmación de fecha y desplazamiento</div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script>
+const EJEMPLO = {
+  f_para:"",
+  f_tarifas:"3 horas, 4 músicos, 1.290 €\n3 horas, 5 músicos, 1.390 €\n3 horas, 6 músicos, 1.490 €",
+  f_incluye:"Instrumentos\nEquipo de sonido profesional\nIluminación de escenario\nTraslado del equipo\nMontaje y desmontaje",
+  f_cnombre:"Alberto Méndez", f_ctel:"+34 722 716 255", f_cemail:"abueleros@gmail.com"
+};
+const FIELDS = Object.keys(EJEMPLO);
+const $ = id => document.getElementById(id);
+const val = id => ($(id) ? $(id).value.trim() : "");
+const setTxt = (id,v) => { const e=$(id); if(e) e.textContent=v; };
+const esc = s => (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+function parseTarifas(text){
+  const groups={}, order=[];
+  text.split("\n").map(l=>l.trim()).filter(Boolean).forEach(line=>{
+    const p=line.split(","); if(p.length<3) return;
+    const dur=p[0].trim(), mus=p[1].trim(), precio=p.slice(2).join(",").trim();
+    if(!groups[dur]){ groups[dur]=[]; order.push(dur); }
+    groups[dur].push({mus,precio});
+  });
+  return order.map(dur=>({dur,opciones:groups[dur]}));
+}
+function render(){
+  // dirigido a
+  const para=val("f_para");
+  $("b_para").style.display = para ? "" : "none";
+  setTxt("b_para_t", para);
+
+  // tarifas
+  const wrap=$("b_tarifas"); wrap.innerHTML="";
+  parseTarifas(val("f_tarifas")).forEach(g=>{
+    const tier=document.createElement("div"); tier.className="tier";
+    tier.innerHTML = `<div class="tier__h"><span class="tier__dur">${esc(g.dur)}</span><span class="tier__line"></span><span class="tier__tag">de directo</span></div>`;
+    g.opciones.forEach(o=>{
+      const r=document.createElement("div"); r.className="prow";
+      r.innerHTML=`<span class="prow__m">${esc(o.mus)}</span><span class="prow__p">${esc(o.precio)}</span>`;
+      tier.appendChild(r);
+    });
+    wrap.appendChild(tier);
+  });
+
+  // incluye
+  const g=$("b_incluye"); g.innerHTML="";
+  val("f_incluye").split("\n").map(s=>s.trim()).filter(Boolean).forEach(it=>{
+    const d=document.createElement("div"); d.textContent=it; g.appendChild(d);
+  });
+
+  // contacto (editable, oculta lo vacío)
+  const nombre=val("f_cnombre"), tel=val("f_ctel"), email=val("f_cemail");
+  const parts=[];
+  if(nombre) parts.push(`<b>${esc(nombre)}</b>`);
+  if(tel) parts.push(`<a href="tel:${esc(tel.replace(/\s+/g,""))}"><b>${esc(tel)}</b></a>`);
+  if(email) parts.push(`<a href="mailto:${esc(email)}"><b>${esc(email)}</b></a>`);
+  $("b_contact").innerHTML = parts.join(" · ");
+
+  document.title = "Presupuesto · La Banda de la Abuela" + (para?(" · "+para):"");
+  save();
+}
+function fitPreview(){
+  const doc=$("doc"), pv=$("preview");
+  const avail=pv.clientWidth-56; let z=avail/794; if(z>1)z=1; if(z<0.2)z=0.2;
+  doc.style.transform="scale("+z+")";
+  doc.style.marginBottom=(doc.scrollHeight*(z-1))+"px";
+}
+function save(){ const d={}; FIELDS.forEach(id=>d[id]=val(id)); try{localStorage.setItem("lba_presu",JSON.stringify(d));}catch(e){} }
+function load(o){ FIELDS.forEach(id=>{ if($(id)&&o[id]!==undefined) $(id).value=o[id]; }); }
+function cargarEjemplo(){ load(EJEMPLO); render(); fitPreview(); }
+function limpiar(){
+  FIELDS.forEach(id=>{ if($(id)) $(id).value=""; });
+  // el contacto vuelve a los valores por defecto al limpiar
+  $("f_cnombre").value=EJEMPLO.f_cnombre; $("f_ctel").value=EJEMPLO.f_ctel; $("f_cemail").value=EJEMPLO.f_cemail;
+  try{localStorage.removeItem("lba_presu");}catch(e){}
+  render(); fitPreview();
+}
+
+document.getElementById("form").addEventListener("input", render);
+window.addEventListener("resize", fitPreview);
+
+(function init(){
+  let saved=null; try{ saved=JSON.parse(localStorage.getItem("lba_presu")||"null"); }catch(e){}
+  load(saved || EJEMPLO);
+  render(); fitPreview();
+})();
+</script>
+</body>
+</html>
