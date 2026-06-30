@@ -117,11 +117,16 @@ body{ font-family:'Hanken',sans-serif; color:var(--ink); background:#EDE7DE; -we
 @page{ size:A4; margin:0; }
 @media print{
   .appbar,.form,.preview__hint{display:none !important;}
-  .layout{display:block !important;}
-  .preview{height:auto !important;overflow:visible !important;padding:0 !important;background:none !important;}
-  #doc{width:auto !important;margin:0 !important;transform:none !important;zoom:1 !important;}
-  #doc .page{box-shadow:none !important;margin:0 !important;}
-  html,body{background:#fff !important;}
+  /* Cadena de alto al 100% del área imprimible: la hoja vale lo que el
+     navegador dé como imprimible, no 297mm fijos. En escritorio (margen 0)
+     = A4 completo (a sangre); en móvil = el área menor, así nunca desborda
+     a una 2ª hoja en blanco, en cualquier teléfono. */
+  html,body{background:#fff !important;margin:0 !important;padding:0 !important;height:100% !important;}
+  .layout{display:block !important;margin:0 !important;padding:0 !important;height:100% !important;}
+  .preview{height:100% !important;overflow:visible !important;padding:0 !important;margin:0 !important;background:none !important;}
+  #doc{width:auto !important;height:100% !important;margin:0 !important;padding:0 !important;transform:none !important;zoom:1 !important;}
+  #doc .page{box-shadow:none !important;margin:0 !important;width:210mm !important;height:100% !important;overflow:hidden !important;
+    break-inside:avoid !important;page-break-inside:avoid !important;break-after:avoid !important;page-break-after:avoid !important;}
 }
 </style>
 </head>
