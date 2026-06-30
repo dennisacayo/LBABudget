@@ -127,6 +127,9 @@ body{ font-family:'Hanken',sans-serif; color:var(--ink); background:#EDE7DE; -we
   #doc{width:auto !important;height:100% !important;margin:0 !important;padding:0 !important;transform:none !important;zoom:1 !important;}
   #doc .page{box-shadow:none !important;margin:0 !important;width:210mm !important;height:100% !important;overflow:hidden !important;
     break-inside:avoid !important;page-break-inside:avoid !important;break-after:avoid !important;page-break-after:avoid !important;}
+  /* El motor de impresión no difumina las sombras y las pinta como un cuadro
+     gris sólido. Las quitamos al imprimir. */
+  .qphoto{box-shadow:none !important;}
 }
 </style>
 </head>
