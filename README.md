@@ -5,9 +5,10 @@ formulario, ves la vista previa y generas el PDF desde el navegador. Funciona
 en escritorio y móvil; no necesita servidor.
 
 ## Archivos
-- `index.html` — la app (formulario + vista previa + botón Imprimir).
+- `index.html` — la app (formulario + vista previa + botones).
 - `assets/` — foto e logo.
 - `fonts/` — tipografías.
+- `vendor/` — librería `html2pdf.bundle.min.js` (genera el PDF en el navegador).
 
 ## Publicar en GitHub Pages
 1. Sube estos archivos a un repo (con `index.html` en la raíz).
@@ -17,8 +18,11 @@ en escritorio y móvil; no necesita servidor.
 ## Cómo se usa
 1. Abre el enlace (en cualquier navegador, también móvil).
 2. Rellena el formulario; la vista previa se actualiza al escribir.
-3. **Imprimir / Guardar PDF** → "Guardar como PDF", tamaño **A4**, márgenes **Ninguno**.
-   Los colores y la foto se imprimen solos.
+3. **Descargar PDF** (recomendado, sobre todo en móvil): genera el archivo A4
+   con margen 0 directamente, sin pasar por el motor de impresión (que en móvil
+   mete márgenes que no se pueden quitar).
+4. **Imprimir** (alternativa en escritorio): "Guardar como PDF", tamaño **A4**,
+   márgenes **Ninguno**. Da un PDF con texto seleccionable.
 
 ### Tarifas (lo importante)
 Escribe **una línea por opción** con el formato:

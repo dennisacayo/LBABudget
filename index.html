@@ -138,7 +138,8 @@ body{ font-family:'Hanken',sans-serif; color:var(--ink); background:#EDE7DE; -we
   <div class="appbar__sp"></div>
   <button class="btn btn--ghost" onclick="cargarEjemplo()">Cargar ejemplo</button>
   <button class="btn btn--ghost" onclick="limpiar()">Limpiar</button>
-  <button class="btn btn--print" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button class="btn btn--ghost" onclick="window.print()">Imprimir</button>
+  <button class="btn btn--print" id="btnPdf" onclick="descargarPDF()">Descargar PDF</button>
 </div>
 
 <div class="layout">
@@ -217,6 +218,7 @@ body{ font-family:'Hanken',sans-serif; color:var(--ink); background:#EDE7DE; -we
   </main>
 </div>
 
+<script src="vendor/html2pdf.bundle.min.js"></script>
 <script>
 const EJEMPLO = {
   f_para:"",
@@ -299,6 +301,41 @@ function limpiar(){
   $("f_cnombre").value=EJEMPLO.f_cnombre; $("f_ctel").value=EJEMPLO.f_ctel; $("f_cemail").value=EJEMPLO.f_cemail;
   try{localStorage.removeItem("lba_presu");}catch(e){}
   render(); fitPreview();
+}
+
+// Genera el PDF directamente en el navegador (A4, margen 0), sin pasar por el
+// motor de impresión. Así en móvil NO se añaden márgenes: descarga el archivo.
+async function descargarPDF(){
+  const btn=$("btnPdf"); const txt=btn?btn.textContent:"";
+  if(btn){ btn.disabled=true; btn.textContent="Generando…"; }
+  try{
+    if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
+    // Clonamos la hoja a un contenedor limpio, a tamaño real y sin la escala
+    // de la vista previa, para que se capture nítida y completa.
+    const src=document.querySelector(".page");
+    const holder=document.createElement("div");
+    holder.style.cssText="position:fixed;left:-99999px;top:0;width:210mm;background:#fff;";
+    const clone=src.cloneNode(true);
+    clone.style.boxShadow="none"; clone.style.margin="0";
+    holder.appendChild(clone); document.body.appendChild(holder);
+
+    const para=val("f_para");
+    const nombre="Presupuesto - La Banda de la Abuela"+(para?(" - "+para):"");
+    const opt={
+      margin:0,
+      filename:nombre.replace(/[^\w\sÁÉÍÓÚáéíóúÑñ.\-]/g," ").trim()+".pdf",
+      image:{type:"jpeg",quality:0.98},
+      html2canvas:{scale:2,useCORS:true,backgroundColor:"#F1ECE4",windowWidth:794},
+      jsPDF:{unit:"mm",format:"a4",orientation:"portrait"},
+      pagebreak:{mode:["avoid-all"]}
+    };
+    await html2pdf().set(opt).from(clone).save();
+    document.body.removeChild(holder);
+  }catch(err){
+    alert("No se pudo generar el PDF: "+(err&&err.message?err.message:err)+"\nUsa el botón Imprimir como alternativa.");
+  }finally{
+    if(btn){ btn.disabled=false; btn.textContent=txt||"Descargar PDF"; }
+  }
 }
 
 document.getElementById("form").addEventListener("input", render);
