@@ -36,8 +36,12 @@ igual que por WhatsApp. Ejemplo:
 Se **agrupan solas por duración**, así que puedes poner 2, 3 y 4 horas seguidas.
 
 ### Otros campos
+- **Amplificación (opcional):** apartado para el sonido y luces con su precio
+  (concepto + precio). Si dejas ambos vacíos, no aparece en el presupuesto.
 - **Todo incluido:** un concepto por línea (instrumentos, sonido, luces…).
 - **Dirigido a:** opcional; si lo rellenas, aparece bajo el título.
+- **Nota de IVA:** al pie sale fijo que los precios son sin IVA y que, si se
+  requiere factura, se aplica un 21%.
 - **Contacto:** nombre, teléfono y correo. Vienen con los datos actuales por
   defecto; cámbialos si hace falta. "Limpiar" vuelve a poner los de por defecto.
 

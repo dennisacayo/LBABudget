@@ -57,6 +57,15 @@ a{color:inherit;text-decoration:none;}
 .incl__grid div{ font-family:'Hanken',sans-serif;font-weight:500;font-size:13.5px;color:#E7DED1;display:flex;align-items:flex-start;gap:9px; }
 .incl__grid div::before{ content:"✓";color:#FF6B5C;font-weight:700;flex:0 0 auto; }
 
+/* Amplificación (apartado opcional) */
+.amp{ margin-top:18px; }
+.amp__h{ display:flex;align-items:center;gap:12px;margin-bottom:8px; }
+.amp__lab{ font-family:'SpaceMono',monospace;font-weight:700;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--red); }
+.amp__line{ flex:1;height:1px;background:var(--line); }
+.amp__row{ display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:13px 16px; }
+.amp__desc{ font-family:'Hanken',sans-serif;font-weight:600;font-size:14px;color:#2A231E;line-height:1.35; }
+.amp__price{ font-family:'Bricolage',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.02em;color:var(--ink);flex:0 0 auto;white-space:nowrap; }
+
 .qfooter{ margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:20px; }
 .qcontact{ font-family:'SpaceMono',monospace;font-size:11px;letter-spacing:.04em;color:#3C332B;line-height:1.7; }
 .qcontact b{font-weight:700;color:var(--ink);}
@@ -140,6 +149,11 @@ body{ font-family:'Hanken',sans-serif; color:var(--ink); background:#EDE7DE; -we
       <textarea id="f_tarifas" rows="6" placeholder="3 horas, 4 músicos, 1.290 €"></textarea>
       <div class="hint">Formato: <b>duración, músicos, precio</b> (igual que por WhatsApp). Se agrupan solas por duración, así que puedes poner 2, 3 y 4 horas seguidas.</div></div>
 
+    <div class="form__sec">Amplificación (opcional)</div>
+    <div class="fld"><label>Concepto</label><input id="f_amp_desc" placeholder="Equipos de sonido y luces profesionales (500–800 personas)">
+      <div class="hint">Opcional. Si dejas concepto y precio vacíos, este apartado no aparece.</div></div>
+    <div class="fld"><label>Precio</label><input id="f_amp_precio" placeholder="+550 €"></div>
+
     <div class="form__sec">Todo incluido en el precio</div>
     <div class="fld"><label>Qué incluye (uno por línea)</label>
       <textarea id="f_incluye" rows="5" placeholder="Instrumentos&#10;Equipo de sonido profesional&#10;Iluminación de escenario"></textarea></div>
@@ -175,6 +189,11 @@ body{ font-family:'Hanken',sans-serif; color:var(--ink); background:#EDE7DE; -we
 
             <div class="tariffs" id="b_tarifas"></div>
 
+            <div class="amp" id="b_amp" style="display:none;">
+              <div class="amp__h"><span class="amp__lab">Amplificación · opcional</span><span class="amp__line"></span></div>
+              <div class="amp__row"><span class="amp__desc" id="b_amp_desc"></span><span class="amp__price" id="b_amp_precio"></span></div>
+            </div>
+
             <div class="incl">
               <div class="incl__lab">TODO INCLUIDO EN EL PRECIO</div>
               <div class="incl__grid" id="b_incluye"></div>
@@ -184,7 +203,7 @@ body{ font-family:'Hanken',sans-serif; color:var(--ink); background:#EDE7DE; -we
               <div class="qcontact" id="b_contact"></div>
               <a class="qcta" id="b_cta" href="https://bit.ly/bandaabuela-formulario-booking">Reserva tu fecha →</a>
             </div>
-            <div class="qnote">Presupuesto orientativo · sujeto a confirmación de fecha y desplazamiento</div>
+            <div class="qnote">Precios sin IVA · Si se requiere factura, se aplica un 21% de IVA · Presupuesto orientativo, sujeto a confirmación de fecha y desplazamiento</div>
           </div>
 
         </div>
@@ -196,8 +215,10 @@ body{ font-family:'Hanken',sans-serif; color:var(--ink); background:#EDE7DE; -we
 <script>
 const EJEMPLO = {
   f_para:"",
-  f_tarifas:"3 horas, 4 músicos, 1.290 €\n3 horas, 5 músicos, 1.390 €\n3 horas, 6 músicos, 1.490 €",
-  f_incluye:"Instrumentos\nEquipo de sonido profesional\nIluminación de escenario\nTraslado del equipo\nMontaje y desmontaje",
+  f_tarifas:"2 horas, 4 músicos, 890 €\n2 horas, 5 músicos, 1.090 €\n3 horas, 4 músicos, 1.090 €\n3 horas, 5 músicos, 1.390 €",
+  f_amp_desc:"Equipos de sonido y luces profesionales para público de 500–800 personas",
+  f_amp_precio:"+550 €",
+  f_incluye:"Instrumentos\nTraslado del equipo\nMontaje y desmontaje",
   f_cnombre:"Alberto Méndez", f_ctel:"+34 722 716 255", f_cemail:"abueleros@gmail.com"
 };
 const FIELDS = Object.keys(EJEMPLO);
@@ -234,6 +255,12 @@ function render(){
     });
     wrap.appendChild(tier);
   });
+
+  // amplificación (opcional: solo aparece si hay concepto o precio)
+  const ampDesc=val("f_amp_desc"), ampPrecio=val("f_amp_precio");
+  $("b_amp").style.display = (ampDesc||ampPrecio) ? "" : "none";
+  setTxt("b_amp_desc", ampDesc);
+  setTxt("b_amp_precio", ampPrecio);
 
   // incluye
   const g=$("b_incluye"); g.innerHTML="";
