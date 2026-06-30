@@ -334,7 +334,10 @@ async function descargarPDF(){
       margin:0,
       filename:nombre.replace(/[^\w\sÁÉÍÓÚáéíóúÑñ.\-]/g," ").trim()+".pdf",
       image:{type:"jpeg",quality:0.98},
-      html2canvas:{scale:2,useCORS:true,backgroundColor:"#F1ECE4",scrollX:0,scrollY:0},
+      // Fijamos ventana/recorte a 794x1123 (y origen en 0,0) para que html2canvas
+      // ignore el viewport real del móvil; si no, en móvil descuadra la captura.
+      html2canvas:{scale:2,useCORS:true,backgroundColor:"#F1ECE4",
+        width:PW,height:PH,windowWidth:PW,windowHeight:PH,x:0,y:0,scrollX:0,scrollY:0},
       jsPDF:{unit:"mm",format:"a4",orientation:"portrait"},
       pagebreak:{mode:["avoid-all"]}
     };
